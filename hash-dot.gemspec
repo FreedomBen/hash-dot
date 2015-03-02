@@ -10,4 +10,5 @@ Gem::Specification.new do |s|
   s.homepage    =
     'http://rubygems.org/gems/hash-dot'
   s.license       = 'MIT'
+  s.add_development_dependency "rspec"
 end
