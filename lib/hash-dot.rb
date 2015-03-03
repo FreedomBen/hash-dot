@@ -1,6 +1,6 @@
 class Hash
   def define_reader(key)
-    define_method(key) do
+    define_singleton_method(key.to_sym) do
       if has_key?(key)
         return self[key]
       else
@@ -10,23 +10,20 @@ class Hash
   end
 
   def define_writer(key)
-    define_method(key) do |value|
+    define_singleton_method(key.to_sym) do |value|
       self[key[0..-2].to_sym] = value
     end
   end
 
   def method_missing(method, *opts)
     m = method.to_s
-    msym = m.to_sym
 
     if m[-1] == '='
       define_writer(m)
-      return self.send(method, opts)
-    elsif has_key?(m) || has_key?(msym)
-      define_reader(m)
-      return self.send(method, opts)
+      return self.send(method, *opts)
     else
-      super
+      define_reader(m)
+      return self.send(method, *opts)
     end
   end
 end
